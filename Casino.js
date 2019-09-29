@@ -2,11 +2,12 @@ class Casino extends React.Component {
   constructor() {
     super();
     this.state = {
-      fruits: "",
+      fruits: ["🍇", "🍒", "🥝"],
       clicks: 0,
       winner: false
     };
     this.spinMachine = this.spinMachine.bind(this);
+    this.reset = this.reset.bind(this);
   }
   spinMachine() {
     this.refs.machine.spinMachine();
@@ -18,6 +19,13 @@ class Casino extends React.Component {
     this.setState({
       winner: true
     });
+  }
+  reset() {
+    this.setState({
+      clicks: 0,
+      winner: false
+    });
+    this.refs.machine.spinMachine();
   }
   render() {
     return (
@@ -39,9 +47,24 @@ class Casino extends React.Component {
         </div>
         <Machine
           ref="machine"
+          win={this.state.winner}
           winner={this.winner.bind(this)}
           clicks={this.state.clicks}
+          fruits={this.state.fruits}
         />
+        {this.state.winner ? (
+          <div className="container text-center">
+            <button
+              type="button"
+              className="btn btn-info btn-lg"
+              onClick={this.reset}
+            >
+              Jugar otra vez
+            </button>
+          </div>
+        ) : (
+          <div></div>
+        )}
       </div>
     );
   }
